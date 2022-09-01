@@ -12,7 +12,6 @@ import java.util.Properties;
 @RestController
 @RequestMapping("/")
 public class HealthCheckController {
-
     @GetMapping("version")
     public ResponseEntity<String> status() throws IOException {
         Properties properties = new Properties();
