@@ -15,7 +15,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-
 @SpringBootTest
 public class AssistanceServiceTest {
     @Mock
@@ -39,7 +38,6 @@ public class AssistanceServiceTest {
         Assertions.assertEquals(values.size(), 2);
         Assertions.assertSame(values.get(0), assistance1);
         Assertions.assertSame(values.get(1), assistance2);
-
     }
 
     @DisplayName("Listando assistencias indisponíveis :: erro")
@@ -48,6 +46,9 @@ public class AssistanceServiceTest {
         when(assistanceRepository.findAll()).thenReturn(List.of());
         List<Assistance> values = assistanceService.getAssistanceList();
         Assertions.assertEquals(0, values.size());
-
     }
+
+
+
+
 }

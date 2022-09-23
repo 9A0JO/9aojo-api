@@ -14,12 +14,10 @@ import java.util.List;
 @RequestMapping("/assistance")
 public class AssistanceController {
     private final AssistanceService service;
-
     @Autowired
     public AssistanceController(AssistanceService service) {
         this.service = service;
     }
-
     @GetMapping
     public ResponseEntity<List<Assistance>> getAssists() {
         List<Assistance> list = service.getAssistanceList();
