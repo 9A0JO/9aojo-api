@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +39,34 @@ public class OrderServiceTest {
     }
 
     @Test
+    public void create_order_success() throws Exception {
+        Order newOrder = new Order();
+        newOrder.setOperator_id(1234L);
+        orderService.saveOrder(newOrder, generate_mocks_ids(5));
+        verify(orderRepository, times(1)).save(newOrder);
+    }
+
+    @Test
     public void create_order_error_minimum() {
         Order newOrder = new Order();
         newOrder.setOperator_id(1234L);
         Assertions.assertThrows(Exception.class, () -> orderService.saveOrder(newOrder, List.of()));
         verify(orderRepository, times(0)).save(newOrder);
+    }
+
+    @Test
+    public void create_order_error_maximum() {
+        Order newOrder = new Order();
+        newOrder.setOperator_id(1234L);
+        Assertions.assertThrows(Exception.class, () -> orderService.saveOrder(newOrder, generate_mocks_ids(20)));
+        verify(orderRepository, times(0)).save(newOrder);
+    }
+
+    private List<Long> generate_mocks_ids(int number) {
+        ArrayList<Long> arrayList = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            arrayList.add(Integer.toUnsignedLong(i));
+        }
+        return arrayList;
     }
 }

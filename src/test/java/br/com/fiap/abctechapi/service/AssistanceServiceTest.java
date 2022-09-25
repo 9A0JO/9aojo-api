@@ -47,8 +47,4 @@ public class AssistanceServiceTest {
         List<Assistance> values = assistanceService.getAssistanceList();
         Assertions.assertEquals(0, values.size());
     }
-
-
-
-
 }
