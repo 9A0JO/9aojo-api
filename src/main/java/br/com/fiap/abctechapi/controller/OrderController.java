@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderController {
     private OrderApplication orderApplication;
-
     public OrderController(@Autowired OrderApplication orderApplication) {
         this.orderApplication = orderApplication;
     }
-
     @PostMapping
     public ResponseEntity createOrder(@RequestBody OrderDto orderDto) throws Exception {
         orderApplication.createOrder(orderDto);

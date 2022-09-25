@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderApplicationImpl implements OrderApplication {
-    private OrderService orderService;
+    private final OrderService orderService;
     public OrderApplicationImpl(@Autowired OrderService orderService) {
         this.orderService = orderService;
     }
@@ -23,7 +23,6 @@ public class OrderApplicationImpl implements OrderApplication {
         order.setEndOrderLocation(getOrderLocationFromOrderLocationDto(orderDto.getEnd()));
         this.orderService.saveOrder(order, orderDto.getAssists());
     }
-
     private OrderLocation getOrderLocationFromOrderLocationDto(OrderLocationDto orderLocationDto) {
         OrderLocation orderLocation = new OrderLocation();
         orderLocation.setLatitude(orderLocationDto.getLatitude());
