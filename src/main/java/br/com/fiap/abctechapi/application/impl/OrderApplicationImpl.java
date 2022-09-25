@@ -27,7 +27,7 @@ public class OrderApplicationImpl implements OrderApplication {
         OrderLocation orderLocation = new OrderLocation();
         orderLocation.setLatitude(orderLocationDto.getLatitude());
         orderLocation.setLongitude(orderLocationDto.getLongitude());
-        orderLocation.setData(orderLocationDto.getDatetime());
+        orderLocation.setDate(orderLocationDto.getDatetime());
         return orderLocation;
     }
 }

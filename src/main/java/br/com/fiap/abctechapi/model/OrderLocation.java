@@ -17,8 +17,7 @@ public class OrderLocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     private Double latitude;
     private Double longitude;
-    private Date data;
+    private Date date;
 }
