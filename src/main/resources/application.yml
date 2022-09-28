@@ -1,8 +1,8 @@
 server:
   port: 8080
 
-build.name: @project.name@
-build.version: @project.version@
+build.name: "abctechapi"
+build.version: "0.0.2"
 
 spring:
     datasource:

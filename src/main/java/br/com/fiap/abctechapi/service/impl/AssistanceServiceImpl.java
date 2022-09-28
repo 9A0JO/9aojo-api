@@ -19,4 +19,8 @@ public class AssistanceServiceImpl implements AssistanceService {
     public List<Assistance> getAssistanceList() {
         return repository.findAll();
     }
+    @Override
+    public Assistance getAssistanceById(Long id) {
+        return repository.getReferenceById(id);
+    }
 }

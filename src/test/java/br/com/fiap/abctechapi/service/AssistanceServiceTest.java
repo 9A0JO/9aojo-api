@@ -1,5 +1,6 @@
 package br.com.fiap.abctechapi.service;
 
+import br.com.fiap.abctechapi.handler.exception.IdNotFoundException;
 import br.com.fiap.abctechapi.model.Assistance;
 import br.com.fiap.abctechapi.repository.AssistanceRepository;
 import br.com.fiap.abctechapi.service.impl.AssistanceServiceImpl;
@@ -20,6 +21,8 @@ public class AssistanceServiceTest {
     @Mock
     private AssistanceRepository assistanceRepository;
     private AssistanceService assistanceService;
+
+    private final Long ID = 1L;
 
     @BeforeEach
     public void init() {
@@ -46,5 +49,31 @@ public class AssistanceServiceTest {
         when(assistanceRepository.findAll()).thenReturn(List.of());
         List<Assistance> values = assistanceService.getAssistanceList();
         Assertions.assertEquals(0, values.size());
+    }
+
+    @DisplayName("Obter assistance pelo id :: success")
+    @Test
+    public void get_assistance_by_id_success() {
+        Assistance assistance1 = new Assistance(1L, "Mock Assistance 1", "Description 1");
+        when(assistanceRepository.getReferenceById(ID)).thenReturn(assistance1);
+        Assistance result = assistanceService.getAssistanceById(ID);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(Assistance.class, result.getClass());
+        Assertions.assertEquals(assistance1.getId(), result.getId());
+    }
+
+    @DisplayName("Obter assistance pelo id :: error")
+    @Test
+    public void get_assistance_by_id_error() {
+        when(assistanceRepository.getReferenceById(2L)).thenThrow(new IdNotFoundException("Id invalid", "id não encontrado na tabela assistances"));
+        Assertions.assertThrows(IdNotFoundException.class, () -> assistanceService.getAssistanceById(2L));
+        try {
+            assistanceService.getAssistanceById(2L);
+        }
+        catch (Exception e) {
+             Assertions.assertEquals(IdNotFoundException.class, e.getClass());
+             Assertions.assertEquals("Id invalid", e.getMessage());
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package br.com.fiap.abctechapi.handler;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Date;
 @Data

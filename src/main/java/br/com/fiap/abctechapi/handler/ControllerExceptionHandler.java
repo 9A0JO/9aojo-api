@@ -1,5 +1,6 @@
 package br.com.fiap.abctechapi.handler;
 
+import br.com.fiap.abctechapi.handler.exception.IdNotFoundException;
 import br.com.fiap.abctechapi.handler.exception.MaxAssistsException;
 import br.com.fiap.abctechapi.handler.exception.MinimumAssistsRequiredException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,16 @@ import java.util.Date;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessageResponse> error(Exception exception) {
+        return getErrorMessageResponseResponseEntity(exception.getMessage(), exception.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IdNotFoundException.class)
+    public ResponseEntity<ErrorMessageResponse> errorEntityNotFound(IdNotFoundException exception) {
+        return getErrorMessageResponseResponseEntity(exception.getMessage(), exception.getDescription(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(MinimumAssistsRequiredException.class)
     public ResponseEntity<ErrorMessageResponse> errorMinAssistRequired(MinimumAssistsRequiredException exception) {
         return getErrorMessageResponseResponseEntity(exception.getMessage(), exception.getDescription(), HttpStatus.BAD_REQUEST);

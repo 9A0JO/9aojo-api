@@ -1,8 +1,8 @@
 server:
   port: 8080
 
-build.name: abc-tech-api
-build.version: "1.0"
+build.name: "abctechapi"
+build.version: "0.0.2"
 
 spring:
     datasource:
