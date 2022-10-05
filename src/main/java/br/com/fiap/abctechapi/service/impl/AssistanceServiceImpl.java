@@ -23,4 +23,8 @@ public class AssistanceServiceImpl implements AssistanceService {
     public Assistance getAssistanceById(Long id) {
         return repository.getReferenceById(id);
     }
+    @Override
+    public void saveAssist(Assistance assistance) {
+        repository.save(assistance);
+    }
 }

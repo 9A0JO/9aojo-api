@@ -9,6 +9,7 @@ import br.com.fiap.abctechapi.repository.OrderRepository;
 import br.com.fiap.abctechapi.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,33 +36,58 @@ public class OrderServiceTest {
                 .thenReturn(Optional.of(new Assistance(1L, "Teste", "Teste description")));
     }
 
+    @DisplayName("Obter um service :: success")
     @Test
     public void order_service_not_null() {
         Assertions.assertNotNull(orderService);
     }
 
+    @DisplayName("Salvar uma Order em service :: success")
     @Test
-    public void create_order_success() throws Exception {
+    public void create_order_success() {
         Order newOrder = new Order();
-        newOrder.setOperator_id(1234L);
+        newOrder.setOperatorId(1234L);
         orderService.saveOrder(newOrder, generate_mocks_ids(5));
         verify(orderRepository, times(1)).save(newOrder);
     }
 
+    @DisplayName("Salvar quantidade abaixo do minimo de assistence permitidas :: error")
     @Test
     public void create_order_error_minimum() {
         Order newOrder = new Order();
-        newOrder.setOperator_id(1234L);
+        newOrder.setOperatorId(1234L);
         Assertions.assertThrows(MinimumAssistsRequiredException.class, () -> orderService.saveOrder(newOrder, List.of()));
         verify(orderRepository, times(0)).save(newOrder);
     }
 
+    @DisplayName("Salvar quantidade acima de assistence permitidas :: error")
     @Test
     public void create_order_error_maximum() {
         Order newOrder = new Order();
-        newOrder.setOperator_id(1234L);
+        newOrder.setOperatorId(1234L);
         Assertions.assertThrows(MaxAssistsException.class, () -> orderService.saveOrder(newOrder, generate_mocks_ids(20)));
         verify(orderRepository, times(0)).save(newOrder);
+    }
+
+    @DisplayName("Obter lista de Order de service :: success")
+    @Test
+    public void get_list_orders_service() {
+        Order order = new Order();
+        when(orderService.listOrders()).thenReturn(List.of(order));
+        List<Order> listOrder = orderService.listOrders();
+        Assertions.assertEquals( 1, listOrder.size());
+    }
+
+    @DisplayName("Obter lista de Order de service pelo operador id :: success")
+    @Test
+    public void get_order_service_by_operator_id() {
+        Order order = new Order();
+        order.setOperatorId(1234L);
+        List<Order> list = new ArrayList<>();
+        list.add(order);
+        when(orderService.listOrderByOperator(1234L)).thenReturn(List.of(order));
+        List<Order> listOrder = orderService.listOrderByOperator(1234L);
+        Assertions.assertEquals(1, listOrder.size());
     }
 
     private List<Long> generate_mocks_ids(int number) {

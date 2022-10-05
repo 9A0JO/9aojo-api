@@ -1,5 +1,6 @@
 package br.com.fiap.abctechapi.service.impl;
 
+import br.com.fiap.abctechapi.handler.exception.IdNotFoundException;
 import br.com.fiap.abctechapi.handler.exception.MaxAssistsException;
 import br.com.fiap.abctechapi.handler.exception.MinimumAssistsRequiredException;
 import br.com.fiap.abctechapi.model.Assistance;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -24,11 +26,14 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
     @Override
-    public void saveOrder(Order order, List<Long> arrayAssists) throws Exception {
+    public void saveOrder(Order order, List<Long> arrayAssists) {
         ArrayList<Assistance> assistances = new ArrayList<>();
         arrayAssists.forEach(i -> {
-            Assistance assistance = assistanceRepository.findById(i).orElseThrow();
-            assistances.add(assistance);
+            Optional<Assistance> assistance = assistanceRepository.findById(i);
+            if(!assistance.isPresent()) {
+                throw new IdNotFoundException("Id invalid", "id não encontrado na base de dados");
+            }
+            assistances.add(assistance.get());
         });
 
         order.setAssists(assistances);
@@ -44,6 +49,13 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public List<Order> listOrderByOperator(Long operatorId) {
-        return null;
+        return orderRepository.getOrdersByOperatorId(operatorId);
     }
+
+    @Override
+    public List<Order> listOrders() {
+        return orderRepository.findAll();
+    }
+
+
 }

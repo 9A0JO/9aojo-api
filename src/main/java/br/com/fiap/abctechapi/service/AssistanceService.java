@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface AssistanceService {
     List<Assistance> getAssistanceList();
     Assistance getAssistanceById(Long id);
+    void saveAssist(Assistance assistance);
 }

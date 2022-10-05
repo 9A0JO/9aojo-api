@@ -2,6 +2,7 @@ package br.com.fiap.abctechapi.application.impl;
 
 import br.com.fiap.abctechapi.application.AssistanceApplication;
 import br.com.fiap.abctechapi.application.dto.AssistDto;
+import br.com.fiap.abctechapi.application.dto.AssistFormDto;
 import br.com.fiap.abctechapi.handler.exception.IdNotFoundException;
 import br.com.fiap.abctechapi.model.Assistance;
 import br.com.fiap.abctechapi.service.AssistanceService;
@@ -31,7 +32,16 @@ public class AssistanceApplicationImpl implements AssistanceApplication {
             return new AssistDto(assistance);
         }
         catch (EntityNotFoundException e) {
-            throw new IdNotFoundException("Id invalid", "id não encontrado na tabela assistances");
+            throw new IdNotFoundException("Id invalid", "id não encontrado na base de dados");
         }
+
+    }
+    @Override
+    public AssistDto createAssist(AssistFormDto assistDto) {
+        Assistance assistance = new Assistance();
+        assistance.setName(assistDto.getName());
+        assistance.setDescription(assistDto.getDescription());
+        assistanceService.saveAssist(assistance);
+        return new AssistDto(assistance);
     }
 }
