@@ -6,6 +6,8 @@ import br.com.fiap.abctechapi.application.dto.AssistFormDto;
 import br.com.fiap.abctechapi.handler.exception.IdNotFoundException;
 import br.com.fiap.abctechapi.model.Assistance;
 import br.com.fiap.abctechapi.service.AssistanceService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,6 +24,11 @@ public class AssistanceApplicationImpl implements AssistanceApplication {
     @Override
     public List<AssistDto> getAssists() {
         List<Assistance> list = assistanceService.getAssistanceList();
+        return AssistDto.converter(list);
+    }
+    @Override
+    public Page<AssistDto> getAssistsPage(Pageable pageable) {
+        Page<Assistance> list = assistanceService.getAssistanceListPages(pageable);
         return AssistDto.converter(list);
     }
 

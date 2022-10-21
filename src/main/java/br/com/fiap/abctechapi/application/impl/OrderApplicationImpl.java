@@ -11,6 +11,8 @@ import br.com.fiap.abctechapi.model.Order;
 import br.com.fiap.abctechapi.model.OrderLocation;
 import br.com.fiap.abctechapi.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -62,7 +64,6 @@ public class OrderApplicationImpl implements OrderApplication {
         orderLocationDto.setDatetime(orderLocation.getDate());
         return orderLocationDto;
     }
-
     private AssistDto mapAssistsToDto(Assistance assistance) {
         return new AssistDto(assistance);
     }
@@ -76,5 +77,10 @@ public class OrderApplicationImpl implements OrderApplication {
                         mapOrderLocationToDto(order.getStartOrderLocation()),
                         mapOrderLocationToDto(order.getEndOrderLocation())
                 )).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Order> listOrdersOperatorPages(Pageable pageable) {
+        return orderService.listOrdersPage(pageable);
     }
 }

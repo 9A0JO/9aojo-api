@@ -1,9 +1,17 @@
 package br.com.fiap.abctechapi.controller;
 
 import br.com.fiap.abctechapi.application.OrderApplication;
+import br.com.fiap.abctechapi.application.dto.AssistDto;
 import br.com.fiap.abctechapi.application.dto.OrderDto;
 import br.com.fiap.abctechapi.application.dto.OrderResponseDto;
+import br.com.fiap.abctechapi.model.Assistance;
+import br.com.fiap.abctechapi.model.Order;
+import br.com.fiap.abctechapi.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,7 +24,8 @@ import java.util.List;
 @RequestMapping("/order")
 public class OrderController {
     private OrderApplication orderApplication;
-    public OrderController(@Autowired OrderApplication orderApplication) {
+    public OrderController(@Autowired OrderApplication orderApplication
+                           ) {
         this.orderApplication = orderApplication;
     }
     @PostMapping
@@ -32,5 +41,13 @@ public class OrderController {
     @GetMapping("/operator")
     public ResponseEntity<List<OrderResponseDto>> listOrdersOperator() {
         return ResponseEntity.ok(orderApplication.listOrdersOperator());
+    }
+
+    @GetMapping("/paginacao")
+    public ResponseEntity<Page<Order>> findAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable paginacao
+    ) {
+        Page<Order> lista = orderApplication.listOrdersOperatorPages(paginacao);
+        return ResponseEntity.ok(lista);
     }
 }

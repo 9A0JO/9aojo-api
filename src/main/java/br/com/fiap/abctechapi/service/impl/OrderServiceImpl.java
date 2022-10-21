@@ -9,6 +9,8 @@ import br.com.fiap.abctechapi.repository.AssistanceRepository;
 import br.com.fiap.abctechapi.repository.OrderRepository;
 import br.com.fiap.abctechapi.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -55,6 +57,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> listOrders() {
         return orderRepository.findAll();
+    }
+    @Override
+    public Page<Order> listOrdersPage(Pageable paginacao) {
+        return orderRepository.findAll(paginacao);
     }
 
 

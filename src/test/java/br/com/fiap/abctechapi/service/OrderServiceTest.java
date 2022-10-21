@@ -13,6 +13,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +80,24 @@ public class OrderServiceTest {
         List<Order> listOrder = orderService.listOrders();
         Assertions.assertEquals( 1, listOrder.size());
     }
+
+    @DisplayName("Obter lista paginada de Order de service :: success")
+    @Test
+    public void get_list_pages_orders_service() {
+        Order order1 = new Order();
+        Order order2 = new Order();
+        List<Order> lista = new ArrayList<>();
+        lista.add(order1);
+        lista.add(order2);
+
+        Page<Order> orderPages = new PageImpl<>(lista);
+        when(orderService.listOrdersPage(Pageable.ofSize(1))).thenReturn(orderPages);
+        Page<Order> result = orderService.listOrdersPage(Pageable.ofSize(1));
+        Assertions.assertEquals(1, result.getTotalPages());
+        Assertions.assertEquals(2, result.getNumberOfElements());
+        Assertions.assertEquals(2, result.getTotalElements());
+    }
+
 
     @DisplayName("Obter lista de Order de service pelo operador id :: success")
     @Test

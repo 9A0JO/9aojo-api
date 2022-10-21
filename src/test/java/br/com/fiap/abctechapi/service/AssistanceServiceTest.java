@@ -2,29 +2,28 @@ package br.com.fiap.abctechapi.service;
 
 import br.com.fiap.abctechapi.handler.exception.IdNotFoundException;
 import br.com.fiap.abctechapi.model.Assistance;
-import br.com.fiap.abctechapi.repository.AssistanceRepository;
-import br.com.fiap.abctechapi.service.impl.AssistanceServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class AssistanceServiceTest {
-
     @Mock
     private AssistanceService assistanceService;
-
     private final Long ID = 1L;
-
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
@@ -41,6 +40,23 @@ public class AssistanceServiceTest {
         Assertions.assertEquals(values.size(), 2);
         Assertions.assertSame(values.get(0), assistance1);
         Assertions.assertSame(values.get(1), assistance2);
+    }
+
+    @DisplayName("Listando assistence disponíveis de service com paginacao:: success")
+    @Test
+    public void list_service_with_pagination_success() {
+        Assistance assistance1 = new Assistance(1L, "Mock Assistance 1", "Description 1");
+        Assistance assistance2 = new Assistance(1L, "Mock Assistance 2", "Description 2");
+        List<Assistance> lista = new ArrayList<>();
+        lista.add(assistance1);
+        lista.add(assistance2);
+
+        Page<Assistance> assistance = new PageImpl<>(lista);
+        when(assistanceService.getAssistanceListPages(Pageable.ofSize(1))).thenReturn(assistance);
+        Page<Assistance> assist = assistanceService.getAssistanceListPages(Pageable.ofSize(1));
+        Assertions.assertEquals(1, assist.getTotalPages());
+        Assertions.assertEquals(2, assist.getNumberOfElements());
+        Assertions.assertEquals(2, assist.getTotalElements());
     }
 
     @DisplayName("Listando assistence indisponíveis de service :: success")

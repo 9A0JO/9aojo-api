@@ -9,7 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -31,6 +35,23 @@ public class AssistanceRepositoryTest {
         when(assistanceRepository.findAll()).thenReturn(List.of(assistance));
         List<Assistance> list = assistanceRepository.findAll();
         Assertions.assertEquals(1, list.size());
+    }
+
+    @DisplayName("Listando assistence paginadas do repositório :: success")
+    @Test
+    public void get_list_pages_assistance_success() {
+        Assistance assistance1 = new Assistance();
+        Assistance assistance2 = new Assistance();
+        List<Assistance> lista = new ArrayList<>();
+        lista.add(assistance1);
+        lista.add(assistance2);
+
+        Page<Assistance> assistancePages = new PageImpl<>(lista);
+        when(assistanceRepository.findAll(Pageable.ofSize(1))).thenReturn(assistancePages);
+        Page<Assistance> result = assistanceRepository.findAll(Pageable.ofSize(1));
+        Assertions.assertEquals(1, result.getTotalPages());
+        Assertions.assertEquals(2, result.getNumberOfElements());
+        Assertions.assertEquals(2, result.getTotalElements());
     }
 
     @DisplayName("Obtendo assistence do repositório pelo id :: success")

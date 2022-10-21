@@ -13,4 +13,5 @@ public class OrderResponseDto {
     private List<AssistDto> assists;
     private OrderLocationDto start;
     private OrderLocationDto end;
+
 }

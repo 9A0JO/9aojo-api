@@ -9,4 +9,13 @@ public class OrderLocationDto {
     private Double latitude;
     private Double longitude;
     private Date datetime;
+    public Date getDatetime() {
+        if(this.datetime == null) {
+            return new Date();
+        }
+        return datetime;
+    }
+
+
+
 }
